@@ -16,7 +16,7 @@ const Box = styled(motion.div)`
   border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
-const Circle = styled.div`
+const Circle = styled(motion.div)`
   background-color: white;
   height: 70px;
   width: 70px;
@@ -33,17 +33,20 @@ const BoxVariants = {
   end: {
     opacity: 1,
     scale: 1,
-    transition: { type: "spring", duration: 0.5, bounce: 0.5 },
+    transition: {
+      type: "spring",
+      duration: 0.5,
+      bounce: 0.5,
+      delayChildren: 0.5,
+      staggerChildren: 0.1,
+    },
   },
 };
 const circleVariants = {
-  start: { scale: 0 },
+  start: { opacity: 0, y: 10 },
   end: {
-    scale: 2,
-    transition: {
-      type: "spring",
-      bounce: 0.8,
-    },
+    opacity: 1,
+    y: 0,
   },
 };
 
@@ -51,10 +54,10 @@ function App() {
   return (
     <Wrapper>
       <Box variants={BoxVariants} initial="start" animate="end">
-        <Circle />
-        <Circle />
-        <Circle />
-        <Circle />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
       </Box>
     </Wrapper>
   );
