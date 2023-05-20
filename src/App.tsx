@@ -10,55 +10,26 @@ const Wrapper = styled.div`
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-`;
-const Circle = styled(motion.div)`
-  background-color: white;
-  height: 70px;
-  width: 70px;
-  place-self: center;
-  border-radius: 35px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 const BoxVariants = {
-  start: {
-    opacity: 0,
-    scale: 0.5,
-  },
-  end: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      type: "spring",
-      duration: 0.5,
-      bounce: 0.5,
-      delayChildren: 0.5,
-      staggerChildren: 0.1,
-    },
-  },
+  hover: { scale: 1.5, rotateZ: 90 },
+  click: { borderRadius: "100px", scale: 1 },
+  drag: { backgroundColor: "rgb(46, 204, 113)", transition: { duration: 10 } },
 };
-const circleVariants = {
-  start: { opacity: 0, y: 10 },
-  end: {
-    opacity: 1,
-    y: 0,
-  },
-};
-
 function App() {
   return (
     <Wrapper>
-      <Box variants={BoxVariants} initial="start" animate="end">
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-      </Box>
+      <Box
+        drag
+        variants={BoxVariants}
+        whileHover="hover"
+        whileTap="click"
+        whileDrag="drag"
+      ></Box>
     </Wrapper>
   );
 }
