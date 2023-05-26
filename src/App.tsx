@@ -11,13 +11,18 @@ const Wrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 const Box = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  font-size: 28px;
   width: 400px;
   height: 200px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
-  position: absolute;
   top: 100px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
@@ -36,17 +41,29 @@ const Box = styled(motion.div)`
     fill: "rgba(255, 255, 255, 1)",
   },
 }; */
-const boxVariants = {
-  initial: {
+const box = {
+  entry: (back: boolean) => ({
+    x: back ? -500 : 500,
     opacity: 0,
     scale: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.3,
+    },
   },
-  visible: { opacity: 1, scale: 1, rotateZ: 360 },
-  leaving: {
+  exit: (back: boolean) => ({
+    x: back ? 500 : -500,
     opacity: 0,
+    rotateX: 0,
     scale: 0,
-    y: 20,
-  },
+    transition: {
+      duration: 0.3,
+    },
+  }),
 };
 function App() {
   /* const x = useMotionValue(0);
@@ -58,23 +75,32 @@ function App() {
       "linear-gradient(135deg, rgb(149, 212, 46), rgb(50, 164, 209))",
     ]
   ); */
-  const [showing, setShowing] = useState(false);
-  const toggleShowing = () => {
-    setShowing((prev) => !prev);
+  const [visible, setVisible] = useState(1);
+  const [back, setBack] = useState(false);
+  const nextPlease = () => {
+    setBack(false);
+    setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  };
+  const prevPlease = () => {
+    setBack(true);
+    setVisible((prev) => (prev === 1 ? 1 : prev - 1));
   };
   return (
     <Wrapper /*  style={{ background: gradient }} */>
-      <button onClick={toggleShowing}>Click</button>
-      <AnimatePresence>
-        {showing ? (
-          <Box
-            variants={boxVariants}
-            initial="initial"
-            animate="visible"
-            exit="leaving"
-          />
-        ) : null}
+      <AnimatePresence custom={back}>
+        <Box
+          custom={back}
+          variants={box}
+          initial="entry"
+          animate="center"
+          exit="exit"
+          key={visible}
+        >
+          {visible}
+        </Box>
       </AnimatePresence>
+      <button onClick={nextPlease}>Next</button>
+      <button onClick={prevPlease}>Prev</button>
       {/*  <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
           <motion.path
             variants={svg}
